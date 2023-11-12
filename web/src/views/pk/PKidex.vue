@@ -1,13 +1,13 @@
 <template>
-    <CardtoAll>
+    <PlayGround>
         PK
-    </CardtoAll>
+    </PlayGround>
 </template>
 <script>
-import CardtoAll from "@/components/CardtoAll.vue"
+import PlayGround from "@/components/PlayGround.vue"
 export default {
     components: {
-        CardtoAll
+        PlayGround
     }
 }
 
