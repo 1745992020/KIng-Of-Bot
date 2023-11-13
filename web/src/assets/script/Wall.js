@@ -17,6 +17,6 @@ export class Wall extends GameObject {
         const ctx = this.gamemap.ctx;
 
         ctx.fillStyle = this.color;
-        ctx.fillRect(this.c * L, this.r * L, L, L);
+        ctx.fillRect(this.c * L, this.r * L, L, L);//画墙
     }
 }
