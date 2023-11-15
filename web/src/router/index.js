@@ -5,6 +5,9 @@ import RecordIdex from "@/views/record/RecordIdex"
 import RankListidex from "@/views/ranklist/RankListidex"
 import BotIdex from "@/views/user/bot/BotIdex"
 import NotFound from "@/views/error/NotFound"
+import UserAccountLoginView from "@/views/user/account/UserAccountLoginView"
+import UserAccountRegisterView from "@/views/user/account/UserAccountRegisterView"
+
 
 const routes = [
   {
@@ -28,9 +31,19 @@ const routes = [
     component: RankListidex,
   },
   {
-    path: "/bot/",
+    path: "/user/bot/",
     name: "bot_idx",
     component: BotIdex,
+  },
+  {
+    path: "/user/account/login/",
+    name: "user_account_login",
+    component: UserAccountLoginView,
+  },
+  {
+    path: "/user/account/register/",
+    name: "user_account_register",
+    component: UserAccountRegisterView,
   },
   {
     path: "/404/",
