@@ -19,6 +19,14 @@ public class RegisterServiceImpl implements RegisterService {
     @Override
     public Map<String, String> register(String username, String password, String confirmedPassword) {
         Map<String,String>map =new HashMap<>();
+
+        QueryWrapper<User> queryWrapper =new QueryWrapper<>();
+        queryWrapper.eq("username",username);
+        User user =userMapper.selectOne(queryWrapper);
+        if(user!=null){
+            map.put("error_massage","用户名不能重复");
+            return  map;
+        }
         if(username==null){
             map.put("error_massage","用户名不能为空");
             return map;
@@ -43,13 +51,6 @@ public class RegisterServiceImpl implements RegisterService {
         if(!password.equals(confirmedPassword)){
             map.put("error_massage","两次输入密码不一样");
             return map;
-        }
-        QueryWrapper<User> queryWrapper =new QueryWrapper<>();
-        queryWrapper.eq("username",username);
-        User user =userMapper.selectOne(queryWrapper);
-        if(user!=null){
-            map.put("error_massage","用户名不能重复");
-            return  map;
         }
         String encodedPassword = passwordEncoder.encode(password);
         String photo = "https://p.qqan.com/up/2021-7/16255338463527509.png";

@@ -2,7 +2,7 @@ import
 
 <template>
     <CardtoAll>
-        <div class="row justify-content-md-center">
+        <div class="row justify-content-md-center" v-if="!$store.state.user.is_pullinginfo">
             <div class="col-3">
                 <form @submit.prevent="login">
                     <div class="mb-3">
@@ -24,7 +24,7 @@ import
 import CardtoAll from "@/components/CardtoAll.vue"
 import { useStore } from "vuex"
 import { ref } from "vue";
-import router from "@/router/index"
+import router from "@/router/index";
 
 export default {
     components: {
@@ -43,11 +43,9 @@ export default {
                 username: username.value,
                 password: password.value,
                 success() {
-                    router.push({ name: "home" });
                     store.dispatch("getinfo", {
                         success() {
                             router.push({ name: "home" });
-                            //console.log(store.state.user);
                         }
                     })
 

@@ -1,3 +1,4 @@
+import router from "@/router";
 import $ from "jquery"
 
 
@@ -9,7 +10,7 @@ export default {
         photo: "",
         token: "",
         is_login: false,
-
+        is_pullinginfo: true//是否在获取信息，以便获取成功后不显示登陆页面和注册登录的闪屏过程
     },
     getters: {
 
@@ -24,6 +25,16 @@ export default {
         updateToken(state, token) {
             state.token = token;
         },
+        logout(state) {
+            state.id = "";
+            state.username = "";
+            state.photo = "";
+            state.token = "";
+            state.is_login = false;
+        },
+        updatePullinginfo(state, is_pullinginfo) {
+            state.is_pullinginfo = is_pullinginfo;
+        }
     },
     actions: {
         login(context, data) {
@@ -36,6 +47,7 @@ export default {
                 },
                 success(resp) {
                     if (resp.error_massage === "success") {
+                        localStorage.setItem("jwt_token", resp.token);//存到浏览器实现持久化登录
                         context.commit("updateToken", resp.token);
                         data.success(resp);
                     }
@@ -71,6 +83,11 @@ export default {
                     data.error(resp);
                 },
             });
+        },
+        logout(context) {
+            localStorage.removeItem("jwt_token");//从浏览器删除token
+            context.commit("logout");
+            router.push({ name: 'user_account_login' });
         }
     },
     modules: {

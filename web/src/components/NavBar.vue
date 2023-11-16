@@ -17,19 +17,32 @@
                             :to="{ name: 'ranklist_idx' }">排行榜</router-link>
                     </li>
                 </ul>
-                <ul class="navbar-nav">
+                <ul class="navbar-nav" v-if="$store.state.user.is_login">
                     <li class="nav-item dropdown">
+                        <div> <img src="" alt="头像"></div>
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                             aria-expanded="false">
-                            我的
+                            {{ $store.state.user.username }}
                         </a>
                         <ul class="dropdown-menu">
                             <li><router-link class="dropdown-item" :to="{ name: 'bot_idx' }">我的Bot</router-link></li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li> <a class="dropdown-item" href="#"> 退出 </a> </li>
+                            <li> <a class="dropdown-item" @click="logout"> 退出 </a> </li>
                         </ul>
+                    </li>
+                </ul>
+                <ul class="navbar-nav" v-else-if="!$store.state.user.is_pullinginfo">
+                    <li class="nav-item">
+                        <router-link class="nav-link" :to="{ name: 'user_account_login' }" role="button">
+                            登录
+                        </router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link class="nav-link" :to="{ name: 'user_account_register' }" role="button">
+                            注册
+                        </router-link>
                     </li>
                 </ul>
             </div>
@@ -39,12 +52,20 @@
 <script>
 import { useRoute } from 'vue-router';
 import { computed } from 'vue';
+import { useStore } from 'vuex';
+
 export default {
     setup() {
         const rout = useRoute();
+        const store = useStore();
         let now_name = computed(() => rout.name);
+
+        const logout = () => {
+            store.dispatch("logout");
+        }
         return {
-            now_name
+            now_name,
+            logout,
         }
     }
 }
