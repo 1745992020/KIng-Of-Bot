@@ -19,7 +19,6 @@
                 </ul>
                 <ul class="navbar-nav" v-if="$store.state.user.is_login">
                     <li class="nav-item dropdown">
-                        <div> <img src="" alt="头像"></div>
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                             aria-expanded="false">
                             {{ $store.state.user.username }}
