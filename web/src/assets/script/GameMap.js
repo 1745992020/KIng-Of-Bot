@@ -3,8 +3,9 @@ import { Snake } from "./Snake";
 import { Wall } from "./Wall";
 
 export class GameMap extends GameObject {
-    constructor(ctx, parent) {
+    constructor(ctx, parent, store) {
         super();
+        this.store = store;
         this.ctx = ctx;//画布
         this.parent = parent;//画布父元素，用来动态修改画布长宽
         this.L = 0;//一个单位的长度
@@ -17,45 +18,9 @@ export class GameMap extends GameObject {
             new Snake({ id: 1, color: "#F94848", r: 1, c: this.cols - 2 }, this),
         ];
     }
-    check_connectivity(g, sx, sy, tx, ty) {//判断生成的地图是否联通
-        if (sx == tx && sy == ty) return true;
-        g[sx][sy] = true;
-        let dx = [-1, 0, 1, 0], dy = [0, 1, 0, -1];
-        for (let i = 0; i < 4; i++) {
-            let x = sx + dx[i], y = sy + dy[i];
-            if (!g[x][y] && this.check_connectivity(g, x, y, tx, ty))
-                return true;
-        }
-        return false;
-    }
+
     create_wall() {
-        const g = [];//开布尔数组判断是否有墙
-        for (let r = 0; r < this.rows; r++) {
-            g[r] = [];
-            for (let c = 0; c < this.cols; c++) {
-                g[r][c] = false;
-            }
-        }
-        //给四周加上墙(true表示墙)
-        for (let r = 0; r < this.rows; r++) {
-            g[r][0] = g[r][this.cols - 1] = true;
-        }
-        for (let c = 0; c < this.cols; c++) {
-            g[0][c] = g[this.rows - 1][c] = true;
-        }
-        //随机内部障碍物
-        for (let i = 0; i < this.inner_walls_count / 2; i++) {
-            for (let j = 0; j < 1000; j++) {
-                let r = parseInt(Math.random() * this.rows);
-                let c = parseInt(Math.random() * this.cols);
-                if (g[r][c] || g[this.rows - 1 - r][this.cols - 1 - c]) continue;//中心堆成画图
-                if (r == this.rows - 2 && c == 1 || r == 1 && c == this.cols - 2) continue;//判断使其不生成在左下角和右上角
-                g[r][c] = g[this.rows - 1 - r][this.cols - 1 - c] = true;//中心堆成画图
-                break;
-            }
-        }
-        const copy_g = JSON.parse(JSON.stringify(g));//复制一份地防止修改
-        if (!this.check_connectivity(copy_g, this.rows - 2, 1, 1, this.cols - 2)) return false;//不连通返回false
+        const g = this.store.state.pk.gamemap;
         //根据布尔数组画墙
         for (let r = 0; r < this.rows; r++) {
             for (let c = 0; c < this.cols; c++) {
@@ -64,7 +29,6 @@ export class GameMap extends GameObject {
                 }
             }
         }
-        return true;//联通返回true
     }
 
     add_listening_events() {
@@ -83,10 +47,7 @@ export class GameMap extends GameObject {
         });
     }
     start() {
-        for (let i = 0; i < 1000; i++)//一直循环如果发现联通就break
-        {
-            if (this.create_wall()) break;
-        }
+        this.create_wall();
         this.add_listening_events();
 
     }

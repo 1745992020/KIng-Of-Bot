@@ -217,6 +217,12 @@ export default {
             })
         }
         const remove_bot = (bot) => {
+            var choice = confirm("删除将永久删除此Bot");
+            if (choice) {
+                confirmedremove_bot(bot);
+            }
+        }
+        const confirmedremove_bot = (bot) => {
             $.ajax({
                 url: "http://127.0.0.1:3000/user/bot/remove/",
                 type: "post",
@@ -267,6 +273,7 @@ export default {
             add_bot,
             remove_bot,
             update_bot,
+            confirmedremove_bot,
         }
     },
 
