@@ -34,20 +34,21 @@ export default {
     },
     setup() {
         const store = useStore();
-        let match_btn_info = ref("开始匹配");
+        let match_btn_info = ref("寻找对手");
 
         const click_match_btn = () => {
-            if (match_btn_info.value === "开始匹配") {
+            if (match_btn_info.value === "寻找对手") {
                 match_btn_info.value = "取消";
                 store.state.pk.socket.send(JSON.stringify({
                     event: "start-matching",
                 }));
-            }
-            else {
-                match_btn_info.value = "开始匹配";
+                console.log("发送开始匹配");
+            } else {
+                match_btn_info.value = "寻找对手";
                 store.state.pk.socket.send(JSON.stringify({
                     event: "stop-matching",
                 }));
+                console.log("发送停止匹配")
             }
         }
 
