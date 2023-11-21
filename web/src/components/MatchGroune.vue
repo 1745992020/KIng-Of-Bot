@@ -1,7 +1,7 @@
 <template>
     <div class="matchground">
         <div class="row">
-            <div class="col-6">
+            <div class="col-5">
                 <div class="user-photo">
                     <img :src="$store.state.user.photo" alt="头像">
                 </div>
@@ -9,7 +9,17 @@
                     {{ $store.state.user.username }}
                 </div>
             </div>
-            <div class="col-6">
+            <div class="col-2">
+                <div class="select-bot">
+                    <select v-model="select_bot" class="form-select" aria-label="Default select example">
+                        <option value="-1" selected>亲自出马</option>
+                        <option v-for="bot in bots" :key="bot.id" :value="bot.id">
+                            {{ bot.name }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-5">
                 <div class="opponent-photo">
                     <img :src="$store.state.pk.opponent_photo" alt="对手头像">
                 </div>
@@ -28,6 +38,7 @@
 <script>
 import { ref } from 'vue';
 import { useStore } from 'vuex';
+import $ from "jquery"
 
 export default {
     components: {
@@ -35,26 +46,46 @@ export default {
     setup() {
         const store = useStore();
         let match_btn_info = ref("寻找对手");
+        let bots = ref([]);
+        let select_bot = ref("-1");
 
         const click_match_btn = () => {
+
             if (match_btn_info.value === "寻找对手") {
                 match_btn_info.value = "取消";
                 store.state.pk.socket.send(JSON.stringify({
                     event: "start-matching",
+                    //bot_id:select_bot,
                 }));
-                console.log("发送开始匹配");
             } else {
                 match_btn_info.value = "寻找对手";
                 store.state.pk.socket.send(JSON.stringify({
                     event: "stop-matching",
                 }));
-                console.log("发送停止匹配")
             }
         }
 
+        const refresh_bots = () => {
+            $.ajax({
+                url: "http://127.0.0.1:3000/user/bot/getList/",
+                type: "get",
+                headers: {
+                    Authorization: "Bearer " + store.state.user.token,
+                },
+                success(resp) {
+                    bots.value = resp;
+                },
+                error(resp) {
+                    console.log(resp);
+                }
+            })
+        }
+        refresh_bots();
         return {
             match_btn_info,
-            click_match_btn
+            click_match_btn,
+            bots,
+            select_bot,
         }
     }
 
@@ -90,5 +121,9 @@ div.opponent-username {
     font-size: 24px;
     font-weight: 600;
     color: beige;
+}
+
+.select-bot {
+    margin-top: 15vh;
 }
 </style>
