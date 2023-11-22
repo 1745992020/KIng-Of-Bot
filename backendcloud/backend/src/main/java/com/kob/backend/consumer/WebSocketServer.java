@@ -31,7 +31,7 @@ public class WebSocketServer {
     public Game game = null;
     private final static String addPlayerUrl="http://127.0.0.1:3001/player/add/";
     private final static String removePlayerUrl="http://127.0.0.1:3001/player/remove/";
-    private static UserMapper userMapper;
+    public static UserMapper userMapper;
     public static RecordMapper recordMapper;
     public static RestTemplate restTemplate;
     private static BotMapper botMapper;
@@ -91,6 +91,7 @@ public class WebSocketServer {
         if(users.get(b.getId()) != null){
             users.get(b.getId()).game = game;
         }
+
         game.start();
 
         JSONObject respGame = new JSONObject();
@@ -142,7 +143,6 @@ public class WebSocketServer {
                 game.setNextStepA(direction);
         } else if (game.getPlayerB().getId().equals(user.getId())) {
             if(game.getPlayerB().getBotId().equals(-1))//亲自出马
-                System.out.println("Bmove:"+direction);
                 game.setNextStepB(direction);
         }
     }

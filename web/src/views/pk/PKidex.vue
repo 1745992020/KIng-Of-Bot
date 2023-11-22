@@ -42,7 +42,7 @@ export default {
                     })
                     setTimeout(() => {
                         store.commit("updateStatus", "playing");
-                    }, 1000)//2秒之后执行更新为对战页面
+                    }, 200)//2秒之后执行更新为对战页面
                     store.commit("updateGame", data.game);
                 } else if (data.event === "move") {
                     console.log(data);

@@ -1,17 +1,9 @@
 package com.kob.backend.consumer.utils;
 
 import com.alibaba.fastjson2.JSONObject;
-import com.baomidou.mybatisplus.generator.ITemplate;
 import com.kob.backend.consumer.WebSocketServer;
-import com.kob.backend.mapper.UserMapper;
-import com.kob.backend.pojo.Bot;
 import com.kob.backend.pojo.Record;
-import com.kob.backend.pojo.User;
 import lombok.Getter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
 import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
@@ -32,26 +24,14 @@ public class Game extends Thread {
 
     private String status = "playing";//表示游戏状态“playing”或“finished”
     private String loser = "";//all平局,A输,B输
-    private final String addBotUrl = "http://127.0.0.1:3002/bot/add/";
 
-
-    public Game(Integer rows, Integer cols, Integer inner_walls_count, Integer idA, Bot botA, Integer idB,Bot botB) {
+    public Game(Integer rows, Integer cols, Integer inner_walls_count,Integer idA,Integer idB) {
         this.rows = rows;
         this.cols = cols;
         this.inner_walls_count = inner_walls_count;
         this.g = new int[rows][cols];
-        Integer botIdA = -1 , botIdB = -1;
-        String botCodeA = "" , botCodeB = "";
-        if(botA!=null){
-            botIdA = botA.getId();
-            botCodeA = botA.getContent();
-        }
-        if(botB!=null){
-            botIdB = botB.getId();
-            botCodeB = botB.getContent();
-        }
-        playerA = new Player(idA,botIdA,botCodeA,rows - 2, 1, new ArrayList<>());
-        playerB = new Player(idB,botIdB,botCodeB,1, cols - 2, new ArrayList<>());
+        playerA = new Player(idA, rows - 2, 1, new ArrayList<>());
+        playerB = new Player(idB, 1, cols - 2, new ArrayList<>());
     }
 
     public int[][] getGameMap() {
@@ -131,39 +111,12 @@ public class Game extends Thread {
         }
     }
 
-    private String getInput(Player player){//编码当前局面信息
-        //地图#me_sx#me_sy#me_steps#you_dx#you_dy#you_steps#
-        Player me,you;
-        if(playerA.getId().equals(player.getId())){
-            me = playerA;
-            you = playerB;
-        }else {
-            me = playerB;
-            you = playerA;
-        }
-        return getMapString() + "#" + me.getSx() + "#" + me.getSy() + "#(" + me.getstepsString() + ")#" + you.getSx() +
-                "#" + you.getSy() + "#(" + you.getstepsString() + ")";
-    }
-
-    private void sendBotCode(Player player){
-        if (player.getBotId().equals(-1)) return;//亲自出马
-        MultiValueMap<String,String> data = new LinkedMultiValueMap<>();
-        data.add("user_id",player.getId().toString());
-        data.add("bot_code",player.getBotCode());
-        data.add("input",getInput(player));
-        WebSocketServer.restTemplate.postForObject(addBotUrl,data,String.class);
-    }
-
     public boolean nextStep() {//获取两名玩家下一步操作
         try {
             Thread.sleep(200);//前端渲染时200ms画一次，防止多次的输入都被覆盖而只渲染最后一步
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-
-        sendBotCode(playerA);
-        sendBotCode(playerB);
-
         for (int i = 0; i < 50; i++) {
             try {
                 Thread.sleep(100);
@@ -186,44 +139,34 @@ public class Game extends Thread {
     public boolean check_valid(List<Cell> SnackA,List<Cell> SnackB){//判断蛇头下一步操作是否合法
         int n=SnackA.size();
         Cell head = SnackA.get(n-1);
-        if(g[head.x][head.y] == 1 )return false;
+        if(g[head.getX()][head.getY()]==1 )return false;
         for (int i = 0; i < n-1; i++) {
-            if(SnackA.get(i).x == head.x && SnackA.get(i).y == head.y)return false;
+            if(Objects.equals(SnackA.get(i).getX(), head.getX()) && Objects.equals(SnackA.get(i).getY(), head.getY()))return false;
         }
         for (int i = 0; i < n-1; i++) {
-            if(SnackB.get(i).x == head.x && SnackB.get(i).y == head.y)return false;
+            if(Objects.equals(SnackB.get(i).getX(), head.getX()) && Objects.equals(SnackB.get(i).getY(), head.getY()))return false;
         }
         return true;
     }
-
-
-    private void judge() {  // 判断两名玩家下一步操作是否合法
-        List<Cell> SnackA = playerA.getCells();
-        List<Cell> SnackB = playerB.getCells();
-
-        boolean validA = check_valid(SnackA, SnackB);
-        boolean validB = check_valid(SnackB, SnackA);
-        if (!validA || !validB) {
-            status = "finished";
-
-            if (!validA && !validB) {
-                loser = "all";
+    public void judge() {//判断玩家下一步是否合法
+        List<Cell> SnackA=playerA.getCells();
+        List<Cell> SnackB=playerB.getCells();
+        boolean validA = check_valid(SnackA,SnackB);
+        boolean validB = check_valid(SnackB,SnackA);
+        if(!validA || !validB){
+            status="finished";
+            if(!validA && !validB){
+                loser="all";
             } else if (!validA) {
-                loser = "A";
-            } else {
-                loser = "B";
+                loser="A";
+            }else if (!validB){
+                loser="B";
             }
         }
     }
-
     public void sendAllMessage(String Message){//广播信息
-        if(WebSocketServer.users.get(playerA.getId()) != null) {
-            WebSocketServer.users.get(playerA.getId()).setMassage(Message);
-        }
-        if(WebSocketServer.users.get(playerB.getId()) != null){
-            WebSocketServer.users.get(playerB.getId()).setMassage(Message);
-        }
-
+        WebSocketServer.users.get(playerA.getId()).setMassage(Message);
+        WebSocketServer.users.get(playerB.getId()).setMassage(Message);
     }
     public void sendMove(){//发送移动情况
         lock.lock();
@@ -248,25 +191,7 @@ public class Game extends Thread {
         }
         return res.toString();
     }
-
-    private void updateUserRating(Player player,Integer rating){
-         User user = WebSocketServer.userMapper.selectById(player.getId());
-         user.setRating(rating);
-         WebSocketServer.userMapper.updateById(user);
-    }
     public void saveRecord(){
-        Integer ratingA = WebSocketServer.userMapper.selectById(playerA.getId()).getRating();
-        Integer ratingB = WebSocketServer.userMapper.selectById(playerB.getId()).getRating();
-
-        if("A".equals(loser)){
-            ratingA-=2;
-            ratingB+=5;
-        } else if ("B".equals(loser)) {
-            ratingA+=5;
-            ratingB-=2;
-        }
-        updateUserRating(playerA,ratingA);
-        updateUserRating(playerB,ratingB);
         Record record = new Record(
                 null,
                 playerA.getId(),

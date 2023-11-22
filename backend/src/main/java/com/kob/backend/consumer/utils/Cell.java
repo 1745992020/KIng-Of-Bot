@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Cell {
-    public Integer x;
-    public Integer y;
+    private Integer x;
+    private Integer y;
 }

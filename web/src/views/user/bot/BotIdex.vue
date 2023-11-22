@@ -64,7 +64,6 @@
                             <thead>
                                 <tr>
                                     <th>名称</th>
-                                    <th>积分</th>
                                     <th>创建时间</th>
                                     <th>操作</th>
                                 </tr>
@@ -72,7 +71,6 @@
                             <tbody>
                                 <tr v-for="bot in bots" :key="bot.id">
                                     <td>{{ bot.name }}</td>
-                                    <td>{{ bot.rating }}</td>
                                     <td>{{ bot.createtime }}</td>
                                     <td>
                                         <!-- Button trigger modal -->
