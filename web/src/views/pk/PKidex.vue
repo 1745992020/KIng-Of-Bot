@@ -70,6 +70,7 @@ export default {
         onUnmounted(() => {
             console.log('取消挂载')
             socket.close();
+            store.commit("updateLoser", "none");
             //store.state.pk.socket = null;
             store.commit("updateStatus", "matching");
         })
