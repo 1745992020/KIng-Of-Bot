@@ -38,7 +38,7 @@ export default {
         let confirmedPassword = ref('');
         let error_massage = ref('');
         const register = () => {
-            error_massage = '';
+            //error_massage.value = '';
             $.ajax({
                 url: "http://127.0.0.1:3000/user/account/register/",
                 type: "post",
@@ -49,9 +49,11 @@ export default {
                 },
                 success(resp) {
                     if (resp.error_massage === "success") {
+                        alert("注册成功！")
                         router.push({ name: 'user_account_login' });
                     }
                     else {
+                        console.log(resp.error_massage);
                         error_massage.value = resp.error_massage;
                     }
                 },

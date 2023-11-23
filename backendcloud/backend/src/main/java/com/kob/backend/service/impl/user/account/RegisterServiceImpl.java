@@ -25,7 +25,7 @@ public class RegisterServiceImpl implements RegisterService {
         User user =userMapper.selectOne(queryWrapper);
         if(user!=null){
             map.put("error_massage","用户名不能重复");
-            return  map;
+            return map;
         }
         if(username==null){
             map.put("error_massage","用户名不能为空");
@@ -38,7 +38,7 @@ public class RegisterServiceImpl implements RegisterService {
         username=username.trim();
         if(username.isEmpty()){
             map.put("error_massage","用户名不能为空");
-            return  map;
+            return map;
         }
         if(password.isEmpty()||confirmedPassword.isEmpty()){
             map.put("error_massage","密码不能为空");
@@ -53,10 +53,21 @@ public class RegisterServiceImpl implements RegisterService {
             return map;
         }
         String encodedPassword = passwordEncoder.encode(password);
-        String photo = "https://p.qqan.com/up/2021-7/16255338463527509.png";
-        User newuser = new User(null,username,encodedPassword,photo,1500);
+        String[] photos = new String[]{
+                "https://p.qqan.com/up/2021-7/16255338463527509.png",
+                "https://tupian.qqw21.com/article/UploadPic/2021-4/202141120475135553.jpg",
+                "https://tupian.qqw21.com/article/UploadPic/2021-4/20214720294413745.jpg",
+                "https://tupian.qqw21.com/article/UploadPic/2020-6/20206292156621400.jpg",
+                "https://pic3.zhimg.com/50/v2-489247e55238dd4209d40d601da9d271_hd.jpg?source=1940ef5c",
+                "https://tse3-mm.cn.bing.net/th/id/OIP-C.gTUjdrlN73h-cIMZ010I3AAAAA?rs=1&pid=ImgDetMain",
+                "https://imgo.youxiniao.com/img2021/2/3/20/2021232045463286.jpg",
+                "https://tse4-mm.cn.bing.net/th/id/OIP-C.csLASrVzsSjXJnAUx97hvwAAAA?rs=1&pid=ImgDetMain",
+        };
+        String photo = photos[(int)(Math.random()*photos.length)];
+
+        User newuser = new User(null,username,encodedPassword,photo,1500,0);
         userMapper.insert(newuser);
         map.put("error_massage","success");
-        return  map;
+        return map;
     }
 }

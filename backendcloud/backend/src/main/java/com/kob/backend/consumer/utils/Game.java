@@ -9,6 +9,7 @@ import com.kob.backend.pojo.Record;
 import com.kob.backend.pojo.User;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -254,7 +255,22 @@ public class Game extends Thread {
          user.setRating(rating);
          WebSocketServer.userMapper.updateById(user);
     }
+    private void updateMatchCount(Player player ,Integer matchcount){
+        User user =WebSocketServer.userMapper.selectById(player.getId());
+        user.setMatchcount(matchcount);
+        WebSocketServer.userMapper.updateById(user);
+    }
     public void saveRecord(){
+
+        Integer matchcountA = WebSocketServer.userMapper.selectById(playerA.getId()).getMatchcount();
+        Integer matchcountB = WebSocketServer.userMapper.selectById(playerB.getId()).getMatchcount();
+
+        matchcountA++;
+        matchcountB++;
+
+        updateMatchCount(playerA,matchcountA);
+        updateMatchCount(playerB,matchcountB);
+
         Integer ratingA = WebSocketServer.userMapper.selectById(playerA.getId()).getRating();
         Integer ratingB = WebSocketServer.userMapper.selectById(playerB.getId()).getRating();
 

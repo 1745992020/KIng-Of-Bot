@@ -2,14 +2,14 @@
     <div class="container">
         <div class="row">
             <div class="col-3">
-                <div class="card" style="margin-top: 10%;">
+                <div class="card" style="margin-top: 7%;">
                     <div class="card-body">
                         <img :src="$store.state.user.photo" alt="头像" style="width: 100%;">
                     </div>
                 </div>
             </div>
             <div class="col-9">
-                <div class="card" style="margin-top: 3%;">
+                <div class="card" style="margin-top: 2%;">
                     <div class="card-header">
                         <span style="font-size: 150%;">我的Bot</span>
                         <!-- Button trigger modal -->
@@ -60,7 +60,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <table class="table table-hover">
+                        <table class="table table-hover" style="text-align: center;">
                             <thead>
                                 <tr>
                                     <th>名称</th>
@@ -87,7 +87,7 @@
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                             aria-label="Close"></button>
                                                     </div>
-                                                    <div class="modal-body">
+                                                    <div class="modal-body" style="text-align: initial;;">
                                                         <div class="mb-3">
                                                             <label for="name" class="form-label">名字</label>
                                                             <input v-model="bot.name" type="text" class="form-control"
