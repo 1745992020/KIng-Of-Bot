@@ -10,6 +10,9 @@ export default {
         photo: "",
         token: "",
         is_login: false,
+        waitingtime: 0,
+        is_matchsuccess: false,
+        interval: null,//方便随时结束计时间循环函数
         is_pullinginfo: true//是否在获取信息，以便获取成功后不显示登陆页面和注册登录的闪屏过程
     },
     getters: {
@@ -34,6 +37,19 @@ export default {
         },
         updatePullinginfo(state, is_pullinginfo) {
             state.is_pullinginfo = is_pullinginfo;
+        },
+        updateWaitingTime(state, waitingtime) {
+            state.waitingtime = waitingtime;
+        },
+        updateIntervalStart(state, interval) {
+            state.interval = interval;
+        },
+        updateIntervalStop(state) {
+            clearInterval(state.interval);
+            state.interval = null;
+        },
+        updateIsmatchingSuccess(state, is_matchsuccess) {
+            state.is_matchsuccess = is_matchsuccess;
         }
     },
     actions: {

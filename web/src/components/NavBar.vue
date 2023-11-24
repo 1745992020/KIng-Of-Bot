@@ -1,5 +1,5 @@
 <template>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary ">
         <div class="container">
             <router-link class="navbar-brand" :to="{ name: 'home' }">King Of Bot</router-link>
             <div class="collapse navbar-collapse" id="navbarText">

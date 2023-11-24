@@ -94,23 +94,6 @@ export class GameMap extends GameObject {
             snake.Snake_next_step();
         }
     }
-    check_valid(cell) {//检测目标位置是否合法
-        for (const wall of this.walls) {
-            if (wall.c === cell.c && wall.r === cell.r) {
-                return false;
-            }
-        }
-        for (const snake of this.Snakes) {
-            let k = snake.cells.length;
-            if (!snake.check_tail_increasing)//当蛇尾缩进近时，此时走到蛇尾是合法的
-                k--;
-            for (let i = 0; i < k; i++) {
-                if (snake.cells[i].c === cell.c && snake.cells[i].r === cell.r)
-                    return false;
-            }
-        }
-        return true;
-    }
     update() {
         this.update_size();
         if (this.check_ready()) {

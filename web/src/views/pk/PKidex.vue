@@ -2,6 +2,12 @@
     <PlayGround v-if="$store.state.pk.status === 'playing'"></PlayGround>
     <MatchGround v-if="$store.state.pk.status === 'matching'"></MatchGround>
     <ResultBoard v-if="$store.state.pk.loser !== 'none'"></ResultBoard>
+    <div class="user-color" v-if="$store.state.pk.status === 'playing' && $store.state.pk.a_id == $store.state.user.id">
+        你是蓝色方
+    </div>
+    <div class="user-color" v-if="$store.state.pk.status === 'playing' && $store.state.pk.b_id == $store.state.user.id">
+        你是红色方
+    </div>
 </template>
 <script>
 import PlayGround from "@/components/PlayGround.vue"
@@ -30,29 +36,31 @@ export default {
             socket = new WebSocket(socketUrl);
 
             socket.onopen = () => {
-                console.log("connected!");
+                //console.log("connected!");
                 store.commit("updateSocket", socket);
             }
             socket.onmessage = masg => {
                 const data = JSON.parse(masg.data);
                 if (data.event === "success") {//匹配成功
-                    console.log("匹配成功")
+                    //console.log("匹配成功")
                     store.commit("updateOpponent", {
                         username: data.opponent_username,
                         photo: data.opponent_photo,
                     })
+                    store.commit("updateIsmatchingSuccess", true);
+                    store.commit("updateIntervalStop");
+                    store.commit("updateWaitingTime", 0);
                     setTimeout(() => {
                         store.commit("updateStatus", "playing");
-                    }, 200)//2秒之后执行更新为对战页面
+                        store.commit("updateIsmatchingSuccess", false);
+                    }, 200)//0.2秒之后执行更新为对战页面
                     store.commit("updateGame", data.game);
                 } else if (data.event === "move") {
-                    console.log(data);
                     const game = store.state.pk.gameObject;
                     const [snake0, snake1] = game.Snakes;
                     snake0.set_direction(data.a_direction);
                     snake1.set_direction(data.b_direction);
                 } else if (data.event === "result") {
-                    console.log(data);
                     const game = store.state.pk.gameObject;
                     const [snake0, snake1] = game.Snakes;
                     if (data.loser === "all" || data.loser === "A") {
@@ -65,18 +73,25 @@ export default {
                 }
             }
             socket.onclose = () => {
-                console.log("disconnected!");
+                //console.log("disconnected!");
             }
         })
         onUnmounted(() => {
-            console.log('取消挂载')
+            //console.log('取消挂载')
             socket.close();
             store.commit("updateLoser", "none");
-            //store.state.pk.socket = null;
+            store.state.pk.socket = null;
             store.commit("updateStatus", "matching");
         })
     }
 }
 
 </script>
-<style scoped></style>
+<style scoped>
+div.user-color {
+    text-align: center;
+    font-size: 30px;
+    font-weight: 600;
+    color: white;
+}
+</style>

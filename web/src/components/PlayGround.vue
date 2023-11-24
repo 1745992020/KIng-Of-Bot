@@ -1,6 +1,6 @@
 <template>
     <div class="playground">
-        <GameMap>游戏区域</GameMap>
+        <GameMap>游戏地图</GameMap>
     </div>
 </template>
 
@@ -16,9 +16,10 @@ export default {
 
 <style scoped>
 div.playground {
-    /* background-color: rgb(0, 46, 57); */
-    width: 60vw;
+    width: 70vw;
     height: 70vh;
-    margin: 5% auto;
+    margin: 0% auto;
+    margin-top: 5%;
+    margin-bottom: 1%;
 }
 </style>

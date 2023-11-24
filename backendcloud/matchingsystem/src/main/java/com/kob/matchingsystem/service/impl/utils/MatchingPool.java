@@ -55,7 +55,7 @@ public class MatchingPool extends Thread{
         return ratingDelta <= waitTime*10;
     }
     private void sendResult(Player a,Player b){//返回a，b的匹配结果
-        System.out.println("匹配成功"+a+" "+b);
+        //System.out.println("匹配成功"+a+" "+b);
         MultiValueMap<String,String> data = new LinkedMultiValueMap<>();
         data.add("a_id",a.userId.toString());
         data.add("b_id",b.userId.toString());

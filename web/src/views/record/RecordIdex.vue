@@ -4,8 +4,8 @@
             <table class="table table-hover" style="text-align: center;">
                 <thead>
                     <tr>
-                        <th>玩家 A</th>
-                        <th>玩家 B</th>
+                        <th>蓝色方</th>
+                        <th>红色方</th>
                         <th>对战结果</th>
                         <th>对战时间</th>
                         <th>操作</th>
@@ -14,12 +14,12 @@
                 <tbody>
                     <tr v-for="record in records" :key="record.record.id">
                         <td>
-                            <img :src="record.a_photo" alt="玩家A的头像" class="record-user-photo">
+                            <img :src="record.a_photo" alt="蓝色方头像" class="record-user-photo">
                             &nbsp;
                             <span class="record-user-username">{{ record.a_username }}</span>
                         </td>
                         <td>
-                            <img :src="record.b_photo" alt="玩家B的头像" class="record-user-photo">
+                            <img :src="record.b_photo" alt="红色方头像" class="record-user-photo">
                             &nbsp;
                             <span class="record-user-username">{{ record.b_username }}</span>
                         </td>
@@ -34,7 +34,7 @@
             </table>
             <nav aria-label="...">
                 <ul class="pagination justify-content-end" style="margin-right: 5vw;">
-                    <li class="page-item disabled">
+                    <li class="page-item">
                         <a class="page-link" @click="click_page(-2)" href="#">上一页</a>
                     </li>
                     <li :class="'page-item ' + page.is_active" v-for="page in pages" :key="page.number">
@@ -125,16 +125,21 @@ export default {
             return g;
         }
 
-        const open_record_content = recordId => {
+        const open_record_content = (recordId) => {
             for (const record of records.value) {
                 if (record.record.id === recordId) {
                     store.commit("updateIsRecord", true);
+                    console.log(record);
                     store.commit("updateGame", {
                         gamemap: StringTo2D(record.record.map),
                         a_id: record.record.aid,
+                        a_photo: record.a_photo,
+                        a_username: record.a_username,
                         a_sx: record.record.asx,
                         a_sy: record.record.asy,
                         b_id: record.record.bid,
+                        b_photo: record.b_photo,
+                        b_username: record.b_username,
                         b_sx: record.record.bsx,
                         b_sy: record.record.bsy,
 

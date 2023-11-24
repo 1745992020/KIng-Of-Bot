@@ -8,13 +8,15 @@ import BotIdex from "@/views/user/bot/BotIdex"
 import NotFound from "@/views/error/NotFound"
 import UserAccountLoginView from "@/views/user/account/UserAccountLoginView"
 import UserAccountRegisterView from "@/views/user/account/UserAccountRegisterView"
+import HomeView from "@/components/HomeView"
 import store from '@/store/index'
 
 const routes = [
   {
-    path: "/",
+    path: "/home/",
     name: "home",
-    redirect: "/pk/",
+    component: HomeView,
+    //redirect: "/pk/",
     meta: {
       requestAuth: true,
     }

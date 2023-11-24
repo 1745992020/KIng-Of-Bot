@@ -63,9 +63,6 @@ export class Snake extends GameObject {
         for (let i = k; i > 0; i--) {//每个元素向后移动一位，相当于头部复制
             this.cells[i] = JSON.parse(JSON.stringify(this.cells[i - 1]));//js赋值是引用，要转化为JSON在转化回来，来实现赋值
         }
-        // if (!this.gamemap.check_valid(this.next_cell)) {//如果下一步不合法，蛇嘎
-        //     this.status = "die";
-        //}
     }
 
     update_move() {

@@ -7,9 +7,13 @@ export default {
         opponent_photo: "",
         gamemap: null,
         a_id: 0,
+        a_photo: '',
+        a_username: '',
         a_sx: 0,
         a_sy: 0,
         b_id: 0,
+        b_photo: '',
+        b_username: '',
         b_sx: 0,
         b_sy: 0,
         gameObject: null,
@@ -32,9 +36,13 @@ export default {
         updateGame(state, game) {
             state.gamemap = game.gamemap;
             state.a_id = game.a_id;
+            state.a_photo = game.a_photo,
+                state.a_username = game.a_username;
             state.a_sx = game.a_sx;
             state.a_sy = game.a_sy;
             state.b_id = game.b_id;
+            state.b_photo = game.b_photo,
+                state.b_username = game.b_username;
             state.b_sx = game.b_sx;
             state.b_sy = game.b_sy;
         },

@@ -30,6 +30,15 @@
             <div class="col-12" style="text-align: center;padding-top: 15vh;">
                 <button @click="click_match_btn" type="button" class="btn btn-outline-light btn-lg">{{ match_btn_info
                 }}</button>
+                <div class="waiting-time" v-if="match_btn_info === '取消' && $store.state.user.is_matchsuccess === false">
+                    已匹配{{ $store.state.user.waitingtime }}秒
+                    <div class="spinner-border spinner-border-sm" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+
+                <div class="matching-success" v-if="$store.state.user.is_matchsuccess === true">匹配成功！</div>
+                <div class="waiting-longtime" v-if="$store.state.user.waitingtime >= 20">当前匹配玩家中与您分值相近的较少，请耐心等待....</div>
             </div>
         </div>
     </div>
@@ -48,7 +57,7 @@ export default {
         let match_btn_info = ref("寻找对手");
         let bots = ref([]);
         let select_bot = ref("-1");
-
+        let waitingtime = 0;
         const click_match_btn = () => {
 
             if (match_btn_info.value === "寻找对手") {
@@ -57,8 +66,16 @@ export default {
                     event: "start-matching",
                     bot_id: select_bot.value,
                 }));
+                store.commit("updateIsmatchingSuccess", false);
+                store.commit("updateIntervalStart", setInterval(() => {
+                    waitingtime++;
+                    store.commit("updateWaitingTime", waitingtime);
+                }, 1000))
             } else {
                 match_btn_info.value = "寻找对手";
+                store.commit("updateIntervalStop");
+                store.commit("updateWaitingTime", 0);
+                waitingtime = store.state.user.waitingtime;
                 store.state.pk.socket.send(JSON.stringify({
                     event: "stop-matching",
                 }));
@@ -81,6 +98,7 @@ export default {
             })
         }
         refresh_bots();
+
         return {
             match_btn_info,
             click_match_btn,
@@ -125,5 +143,20 @@ div.opponent-username {
 
 .select-bot {
     margin-top: 15vh;
+}
+
+div.waiting-time,
+div.waiting-longtime {
+    padding-top: 2vh;
+    color: white;
+}
+
+div.waiting-time {
+    font-size: 20px;
+}
+
+div.matching-success {
+    padding-top: 2vh;
+    color: white;
 }
 </style>

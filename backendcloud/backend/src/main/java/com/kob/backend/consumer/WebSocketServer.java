@@ -53,7 +53,7 @@ public class WebSocketServer {
     public void onOpen(Session session, @PathParam("token") String token) throws IOException {
         // 建立连接
         this.session=session;
-        System.out.println("connected!");
+        //System.out.println("connected!");
         Integer userId = JwtAuthotication.getuserid_from_token(token);
         this.user=userMapper.selectById(userId);
         if(this.user!=null){
@@ -67,7 +67,7 @@ public class WebSocketServer {
     @OnClose
     public void onClose() {
         // 关闭链接
-        System.out.println("disconnected!");
+        //System.out.println("disconnected!");
         if(this.user!=null){
             users.remove(this.user.getId());
             MultiValueMap<String,String> data = new LinkedMultiValueMap<>();
@@ -123,7 +123,7 @@ public class WebSocketServer {
 
     }
     private void startMatching(Integer botId){
-        System.out.println("进入开始匹配函数");
+        //System.out.println("进入开始匹配函数");
         bots.put(this.user.getId(),botId);//存下选手的botId
         MultiValueMap<String,String> data = new LinkedMultiValueMap<>();
         data.add("user_id",this.user.getId().toString());
@@ -131,7 +131,7 @@ public class WebSocketServer {
         restTemplate.postForObject(addPlayerUrl,data,String.class);
     }
     private void stopMatch(){
-        System.out.println("进入停止匹配函数");
+        //System.out.println("进入停止匹配函数");
         bots.remove(this.user.getId());//删除选手的botId
         MultiValueMap<String,String> data =new LinkedMultiValueMap<>();
         data.add("user_id",this.user.getId().toString());
@@ -149,7 +149,7 @@ public class WebSocketServer {
     @OnMessage
     public void onMessage(String message, Session session) {
         // 从Client接收消息
-        System.out.println("receive massage!");
+        //System.out.println("receive massage!");
         JSONObject data = JSONObject.parseObject(message);
         String event = data.getString("event");
         if("start-matching".equals(event)) {

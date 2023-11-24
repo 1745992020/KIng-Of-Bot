@@ -1,6 +1,5 @@
 package com.kob.botrunningsystem.service.impl.utils;
 
-import com.kob.botrunningsystem.utils.BotInterfaceService;
 import org.joor.Reflect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -8,7 +7,11 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.UUID;
+import java.util.function.Supplier;
 
 @Component
 public class Consummer extends Thread {
@@ -33,7 +36,7 @@ public class Consummer extends Thread {
     }
 
     private String addUidToCode(String code,String uid){
-        int k =code.indexOf(" implements com.kob.botrunningsystem.utils.BotInterfaceService");
+        int k =code.indexOf(" implements java.util.function.Supplier<Integer>");
         return code.substring(0,k)+uid+code.substring(k);
     }
 
@@ -42,12 +45,21 @@ public class Consummer extends Thread {
         UUID uuid =UUID.randomUUID();
         String uid = uuid.toString().substring(0,8);
 
-        BotInterfaceService botInterfaceService = Reflect.compile(
+        Supplier<Integer> botInterfaceService = Reflect.compile(
                 "com.kob.botrunningsystem.utils.BOt"+uid,
                 addUidToCode(bot.getBotCode(),uid)
         ).create().get();
 
-        Integer direction = botInterfaceService.nextMove(bot.getInput());
+        File file = new File("input.txt");
+        try (PrintWriter fout = new PrintWriter(file)){
+            fout.println(bot.getInput());
+            fout.flush();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        Integer direction = botInterfaceService.get();
+
         MultiValueMap<String,String> data= new LinkedMultiValueMap<>();
         data.add("user_id",bot.userId.toString());
         data.add("direction",direction.toString());
