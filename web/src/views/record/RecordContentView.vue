@@ -32,4 +32,9 @@ div.user-color {
     width: 7vh;
     border-radius: 50%;
 }
+
+body {
+    background-image: url(@/assets/images/background.png);
+    background-size: cover;
+}
 </style>

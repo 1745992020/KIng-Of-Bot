@@ -18,7 +18,7 @@ const routes = [
     component: HomeView,
     //redirect: "/pk/",
     meta: {
-      requestAuth: true,
+      requestAuth: false,
     }
   },
   {

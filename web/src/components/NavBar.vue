@@ -1,7 +1,7 @@
 <template>
     <nav class="navbar navbar-expand-lg bg-body-tertiary ">
         <div class="container">
-            <router-link class="navbar-brand" :to="{ name: 'home' }">King Of Bot</router-link>
+            <router-link class="navbar-brand" :to="{ name: 'home' }">Snake Of Bot</router-link>
             <div class="collapse navbar-collapse" id="navbarText">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
