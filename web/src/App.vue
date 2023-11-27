@@ -20,7 +20,7 @@ export default {
 </script>
 <style>
 body {
-  background-image: url(@/assets/images/background.png);
+  background-image: url(@/assets/images/backgroune4.jpg);
   background-size: cover;
 }
 </style>

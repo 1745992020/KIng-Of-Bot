@@ -2,7 +2,9 @@
     <div class="container text-center">
         <div class="welcom-text">
             欢迎来到 Snake Of Bot
-            你可以点击对局来进行对局~
+            你可以点击
+            <router-link :to="{ name: 'pk_idx' }">对战</router-link>
+            来进行对局~
         </div>
         <div class="row">
             <div class="col-8">
@@ -29,7 +31,7 @@
                         欲查规则？点击
                         <a href="https://www.yuque.com/u39296687/gepfr6/xlr0x13w7o9kwfo9?singleDoc# 《Snake Of Bot》"
                             target="_blank">游戏规则 </a>
-                        进入游戏一览。
+                        进入一览。
                     </div>
                     <div></div>
                 </div>
@@ -82,5 +84,13 @@ div.beian {
     text-align: center;
     color: white;
     background-color: rgba(0, 0, 0, 0.3);
+}
+
+a {
+    color: black;
+}
+
+a:hover {
+    font-size: 110%;
 }
 </style>

@@ -29,6 +29,7 @@ public class WebSocketServer {
     private User user;
     private Session session = null;
     public Game game = null;
+    public static Game gamebot =null;
     private final static String addPlayerUrl="http://127.0.0.1:3001/player/add/";
     private final static String removePlayerUrl="http://127.0.0.1:3001/player/remove/";
     public static UserMapper userMapper;
@@ -79,7 +80,12 @@ public class WebSocketServer {
         User a = userMapper.selectById(aId);
         User b = userMapper.selectById(bId);
         Integer aBotId = bots.get(aId);
-        Integer bBotId = bots.get(bId);
+        Integer bBotId = 0;
+        if(bId==2){
+            bBotId = 1;
+        }else{
+            bBotId = bots.get(bId);
+        }
         Bot botA = botMapper.selectById(aBotId);
         Bot botB = botMapper.selectById(bBotId);
 
@@ -88,8 +94,10 @@ public class WebSocketServer {
         if(users.get(a.getId()) != null){
             users.get(a.getId()).game = game;
         }
-        if(users.get(b.getId()) != null){
+        if(users.get(b.getId()) != null && bId!=2){
             users.get(b.getId()).game = game;
+        } else if (bId==2) {
+            gamebot = game;
         }
 
         game.start();
@@ -112,15 +120,16 @@ public class WebSocketServer {
             users.get(a.getId()).setMassage(respA.toJSONString());
         }
 
-        JSONObject respB = new JSONObject();
-        respB.put("event","success");
-        respB.put("opponent_username",a.getUsername());
-        respB.put("opponent_photo",a.getPhoto());
-        respB.put("game",respGame);
-        if(users.get(b.getId()) != null){
-            users.get(b.getId()).setMassage(respB.toJSONString());
+        if(bId!=2) {
+            JSONObject respB = new JSONObject();
+            respB.put("event", "success");
+            respB.put("opponent_username", a.getUsername());
+            respB.put("opponent_photo", a.getPhoto());
+            respB.put("game", respGame);
+            if (users.get(b.getId()) != null) {
+                users.get(b.getId()).setMassage(respB.toJSONString());
+            }
         }
-
     }
     private void startMatching(Integer botId){
         //System.out.println("进入开始匹配函数");

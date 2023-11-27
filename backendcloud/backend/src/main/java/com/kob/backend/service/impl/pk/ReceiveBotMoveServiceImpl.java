@@ -17,6 +17,13 @@ public class ReceiveBotMoveServiceImpl implements ReceiveBotMoveService {
             } else if (game.getPlayerB().getId().equals(userId)){
                     game.setNextStepB(direction);
             }
+        } else if (userId==2) {
+            Game game = WebSocketServer.gamebot;
+            if(game.getPlayerA().getId().equals(userId)){
+                game.setNextStepA(direction);
+            } else if (game.getPlayerB().getId().equals(userId)){
+                game.setNextStepB(direction);
+            }
         }
         return "receive bot move success";
     }

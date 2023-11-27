@@ -13,9 +13,13 @@ import
                         <label for="Password" class="form-label">密码</label>
                         <input v-model="password" type="password" class="form-control" id="Password">
                     </div>
+                    <div class="login-to-register">还没有账号?
+                        <router-link :to="{ name: 'user_account_register' }">点此去注册</router-link>
+                    </div>
                     <div class="error_massage">{{ error_massage }}</div>
                     <button type="submit" class="btn btn-primary">登录</button>
                 </form>
+
             </div>
         </div>
     </CardtoAll>
@@ -74,5 +78,10 @@ button {
 
 div.error_massage {
     color: red;
+}
+
+div.login-to-register {
+    color: rgb(127, 127, 255);
+    font-size: 16px;
 }
 </style>

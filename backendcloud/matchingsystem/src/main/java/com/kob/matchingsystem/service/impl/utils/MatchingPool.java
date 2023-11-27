@@ -63,26 +63,37 @@ public class MatchingPool extends Thread{
     }
     private void matchPlayers(){//尝试匹配所有玩家
         //System.out.println("匹配所有玩家"+players.toString());
-        boolean[] used =new boolean[players.size()];
-        for (int i = 0; i < players.size(); i++) {
-            if(used[i])continue;
-            for (int j = i+1; j < players.size() ; j++) {
-                if(used[j])continue;
-                Player a = players.get(i), b = players.get(j);
-                if(checkMatched(a,b)){
-                    used[i]=used[j] = true;
-                    sendResult(a,b);
-                    break;
+        if(players.size()==1){
+            Player a = players.get(0);
+            //System.out.println(a.toString());
+            if(a.waitingTime>30){
+                Player bot = new Player(2,1500,0);
+                sendResult(a,bot);
+                players.clear();
+            }
+        }
+        else {
+            boolean[] used = new boolean[players.size()];
+            for (int i = 0; i < players.size(); i++) {
+                if (used[i]) continue;
+                for (int j = i + 1; j < players.size(); j++) {
+                    if (used[j]) continue;
+                    Player a = players.get(i), b = players.get(j);
+                    if (checkMatched(a, b)) {
+                        used[i] = used[j] = true;
+                        sendResult(a, b);
+                        break;
+                    }
                 }
             }
-        }
-        List<Player> newPlayers = new ArrayList<>();
-        for (int i = 0; i < players.size(); i++) {
-            if(!used[i]){
-                newPlayers.add(players.get(i));
+            List<Player> newPlayers = new ArrayList<>();
+            for (int i = 0; i < players.size(); i++) {
+                if (!used[i]) {
+                    newPlayers.add(players.get(i));
+                }
             }
+            players = newPlayers;
         }
-        players=newPlayers;
     }
     @Override
     public void run() {

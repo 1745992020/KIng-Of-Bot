@@ -221,7 +221,7 @@ public class Game extends Thread {
         if(WebSocketServer.users.get(playerA.getId()) != null) {
             WebSocketServer.users.get(playerA.getId()).setMassage(Message);
         }
-        if(WebSocketServer.users.get(playerB.getId()) != null){
+        if(WebSocketServer.users.get(playerB.getId()) != null || playerB.getId()!=2){
             WebSocketServer.users.get(playerB.getId()).setMassage(Message);
         }
 
@@ -269,7 +269,8 @@ public class Game extends Thread {
         matchcountB++;
 
         updateMatchCount(playerA,matchcountA);
-        updateMatchCount(playerB,matchcountB);
+        if(playerB.getId()!=2)
+            updateMatchCount(playerB,matchcountB);
 
         Integer ratingA = WebSocketServer.userMapper.selectById(playerA.getId()).getRating();
         Integer ratingB = WebSocketServer.userMapper.selectById(playerB.getId()).getRating();
@@ -282,7 +283,8 @@ public class Game extends Thread {
             ratingB-=2;
         }
         updateUserRating(playerA,ratingA);
-        updateUserRating(playerB,ratingB);
+        if(playerB.getId()!=2)
+            updateUserRating(playerB,ratingB);
         Record record = new Record(
                 null,
                 playerA.getId(),
