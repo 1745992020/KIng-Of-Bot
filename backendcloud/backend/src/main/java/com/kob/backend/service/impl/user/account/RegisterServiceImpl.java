@@ -55,9 +55,6 @@ public class RegisterServiceImpl implements RegisterService {
         String encodedPassword = passwordEncoder.encode(password);
         String[] photos = new String[]{
                 "https://p.qqan.com/up/2021-7/16255338463527509.png",
-                "https://tupian.qqw21.com/article/UploadPic/2021-4/202141120475135553.jpg",
-                "https://tupian.qqw21.com/article/UploadPic/2021-4/20214720294413745.jpg",
-                "https://tupian.qqw21.com/article/UploadPic/2020-6/20206292156621400.jpg",
                 "https://pic3.zhimg.com/50/v2-489247e55238dd4209d40d601da9d271_hd.jpg?source=1940ef5c",
                 "https://tse3-mm.cn.bing.net/th/id/OIP-C.gTUjdrlN73h-cIMZ010I3AAAAA?rs=1&pid=ImgDetMain",
                 "https://imgo.youxiniao.com/img2021/2/3/20/2021232045463286.jpg",

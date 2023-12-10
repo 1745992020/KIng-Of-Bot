@@ -50,12 +50,15 @@ export default {
         },
         updateIsmatchingSuccess(state, is_matchsuccess) {
             state.is_matchsuccess = is_matchsuccess;
+        },
+        updateUserPhoto(state, photo) {
+            state.photo = photo;
         }
     },
     actions: {
         login(context, data) {
             $.ajax({
-                url: "https://app6203.acapp.acwing.com.cn/api/user/account/token/",
+                url: "https://www.wangyesheng.online/api/user/account/token/",
                 type: "post",
                 data: {
                     username: data.username,
@@ -78,7 +81,7 @@ export default {
         },
         getinfo(context, data) {
             $.ajax({
-                url: "https://app6203.acapp.acwing.com.cn/api/user/account/info/",
+                url: "https://www.wangyesheng.online/api/user/account/info/",
                 type: "get",
                 headers: {
                     Authorization: "Bearer " + context.state.token,

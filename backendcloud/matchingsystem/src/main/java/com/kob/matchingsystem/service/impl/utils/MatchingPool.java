@@ -66,7 +66,7 @@ public class MatchingPool extends Thread{
         if(players.size()==1){
             Player a = players.get(0);
             //System.out.println(a.toString());
-            if(a.waitingTime>30){
+            if(a.waitingTime>15){
                 Player bot = new Player(2,1500,0);
                 sendResult(a,bot);
                 players.clear();

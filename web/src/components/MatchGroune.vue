@@ -40,7 +40,7 @@
                 <div class="matching-success"
                     v-if="$store.state.pk.status === 'matching' && $store.state.user.is_matchsuccess === true">匹配成功！</div>
                 <div class="waiting-longtime"
-                    v-if="$store.state.pk.status === 'matching' && $store.state.user.waitingtime >= 20">
+                    v-if="$store.state.pk.status === 'matching' && $store.state.user.waitingtime >= 10">
                     当前匹配玩家中与您分值相近的较少，请耐心等待....</div>
             </div>
         </div>
@@ -87,7 +87,7 @@ export default {
 
         const refresh_bots = () => {
             $.ajax({
-                url: "https://app6203.acapp.acwing.com.cn/api/user/bot/getList/",
+                url: "https://www.wangyesheng.online/api/user/bot/getList/",
                 type: "get",
                 headers: {
                     Authorization: "Bearer " + store.state.user.token,

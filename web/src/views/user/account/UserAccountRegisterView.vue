@@ -40,7 +40,7 @@ export default {
         const register = () => {
             //error_massage.value = '';
             $.ajax({
-                url: "https://app6203.acapp.acwing.com.cn/api/user/account/register/",
+                url: "https://www.wangyesheng.online/api/user/account/register/",
                 type: "post",
                 data: {
                     username: username.value,

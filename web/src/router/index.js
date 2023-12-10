@@ -13,10 +13,17 @@ import store from '@/store/index'
 
 const routes = [
   {
+    path: "/",
+    name: "root",
+    redirect: "/home/",
+    meta: {
+      requestAuth: false,
+    }
+  },
+  {
     path: "/home/",
     name: "home",
     component: HomeView,
-    //redirect: "/pk/",
     meta: {
       requestAuth: false,
     }

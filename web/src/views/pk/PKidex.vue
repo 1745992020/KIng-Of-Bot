@@ -24,7 +24,7 @@ export default {
     },
     setup() {
         const store = useStore();
-        const socketUrl = `wss://app6203.acapp.acwing.com.cn/websocket/${store.state.user.token}`;
+        const socketUrl = `wss://www.wangyesheng.online/websocket/${store.state.user.token}`;
         store.commit("updateIsRecord", false);//改为不是录像
 
         let socket = null;

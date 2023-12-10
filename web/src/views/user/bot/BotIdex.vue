@@ -4,7 +4,32 @@
             <div class="col-3">
                 <div class="card" style="margin-top: 7%;">
                     <div class="card-body">
-                        <img :src="$store.state.user.photo" alt="头像" style="width: 100%;">
+                        <img :src="$store.state.user.photo" alt="头像" style="width: 100%; margin-bottom: 10px;">
+                        <button type="button" class="btn btn-outline-info" data-bs-toggle="modal"
+                            data-bs-target="#update_photo">修改头像(简易版)</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal -->
+            <div class="modal fade" id="update_photo" tabindex="-1">
+                <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5">修改头像</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="photo" class="form-label">头像链接</label>
+                                <input v-model="photo_url" type="text" class="form-control" id="photo"
+                                    placeholder="请输入头像链接(目前为简易版，只支持根据图片url地址更新头像)">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="error_massage">{{ botadd.error_massage }}</div>
+                            <button type="button" class="btn btn-primary" @click="update_photo">保存</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -169,10 +194,12 @@ export default {
             content: "",
             error_massage: "",
         })
+        let photo_url = ref("");
+
 
         const refresh_bots = () => {
             $.ajax({
-                url: "https://app6203.acapp.acwing.com.cn/api/user/bot/getList/",
+                url: "https://www.wangyesheng.online/api/user/bot/getList/",
                 type: "get",
                 headers: {
                     Authorization: "Bearer " + store.state.user.token,
@@ -190,7 +217,7 @@ export default {
             botadd.error_massage = "";
             console.log(botadd);
             $.ajax({
-                url: "https://app6203.acapp.acwing.com.cn/api/user/bot/add/",
+                url: "https://www.wangyesheng.online/api/user/bot/add/",
                 type: "post",
                 data: {
                     name: botadd.name,
@@ -222,7 +249,7 @@ export default {
         }
         const confirmedremove_bot = (bot) => {
             $.ajax({
-                url: "https://app6203.acapp.acwing.com.cn/api/user/bot/remove/",
+                url: "https://www.wangyesheng.online/api/user/bot/remove/",
                 type: "post",
                 data: {
                     bot_id: bot.id,
@@ -242,7 +269,7 @@ export default {
         };
         const update_bot = (bot) => {
             $.ajax({
-                url: "https://app6203.acapp.acwing.com.cn/api/user/bot/update/",
+                url: "https://www.wangyesheng.online/api/user/bot/update/",
                 type: "post",
                 data: {
                     bot_id: bot.id,
@@ -265,6 +292,30 @@ export default {
                 }
             })
         }
+        const update_photo = () => {
+            console.log(photo_url.value);
+            $.ajax({
+                url: "https://www.wangyesheng.online/api/user/update/",
+                type: "post",
+                data: {
+                    photo_url: photo_url.value,
+                },
+                headers: {
+                    Authorization: "Bearer " + store.state.user.token,
+                },
+                success(resp) {
+                    if (resp.error_message === "success") {
+                        Modal.getInstance("#update_photo").hide();
+                        console.log(resp.photo);
+                        console.log("成功");
+                    }
+                    else {
+                        console.log("失败");
+                        console.log(resp);
+                    }
+                }
+            })
+        }
         return {
             bots,
             botadd,
@@ -272,6 +323,8 @@ export default {
             remove_bot,
             update_bot,
             confirmedremove_bot,
+            photo_url,
+            update_photo,
         }
     },
 

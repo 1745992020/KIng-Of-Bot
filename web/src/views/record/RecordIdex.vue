@@ -92,7 +92,7 @@ export default {
         const puul_page = page => {
             current_page = page;
             $.ajax({
-                url: "https://app6203.acapp.acwing.com.cn/api/record/getlist/",
+                url: "https://www.wangyesheng.online/api/record/getlist/",
                 data: {
                     page,
                 },
